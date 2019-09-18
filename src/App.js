@@ -3,22 +3,40 @@ import { Provider, Subscribe } from 'unstated'
 
 import styled from 'styled-components'
 
-import TodosContainer from './store'
+import TodosContainer, { VisibilityFilters }   from './containers/todos'
+import FilterLink from './components/FilterLink'
+import List from './components/List'
+import AddList from './components/AddList'
 
-import TodoList from './components/TodoList'
-import AddTodo from './components/AddTodo'
 
 function App () {
   return (
     <Provider>
       <Wrapper>
         <Subscribe to={[TodosContainer]}>
-          {todos => {
-            const list = todos.getList()
+          {todostore => {
+            const list = todostore.getList()
             return (
               <TodosWrapper>
-                <AddTodo onAddTodo={todos.createTodo} />
-                <TodoList items={list} toggleComplete={todos.toggleComplete} />
+                 <FilterLink
+                    onFilter={todostore.setFilter}
+                    filterType={VisibilityFilters.SHOW_ALL}
+                    label="All"
+                  ></FilterLink>
+                  <FilterLink
+                    onFilter={todostore.setFilter}
+                    filterType={VisibilityFilters.SHOW_ACTIVE}
+                    label="Active"
+                  ></FilterLink>
+                  <FilterLink
+                    onFilter={todostore.setFilter}
+                    filterType={VisibilityFilters.SHOW_COMPLETED}
+                    label="Completed"
+                  ></FilterLink>
+
+                <AddList onAddList={todostore.createList} />
+                <List list={list} />
+              
               </TodosWrapper>
             )
           }}

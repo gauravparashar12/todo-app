@@ -2,11 +2,11 @@ import React from 'react'
 
 import styled from 'styled-components'
 
-const AddTodo = ({ onAddTodo, id }) => {
+const AddList = ({ onAddList }) => {
   const handleKeyPress = e => {
     if (e.key === 'Enter') {
       if (e.target.value === '') return
-      onAddTodo(id, e.target.value)
+      onAddList(e.target.value)
     }
   }
 
@@ -14,26 +14,24 @@ const AddTodo = ({ onAddTodo, id }) => {
     <Input
       type="text"
       onKeyPress={handleKeyPress}
-      placeholder="Add new todo..."
+      placeholder="Add new Lists..."
     />
   )
 }
 
 const Input = styled.input`
   background: #3b4049;
-  color: #fff;
+  color: #eee;
   border: none;
   border-radius: 3px;
-  margin-top: 10px;
-  padding: 5px 18px;
-  font-size: 14px;
-  height: 25px;
+  padding: 10px 18px;
+  font-size: 24px;
+  height: 40px;
   width: 500px;
   margin-bottom: 16px;
-
   &::placeholder {
     color: #8d96a8;
   }
 `
 
-export default AddTodo
+export default AddList

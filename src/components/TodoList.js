@@ -3,17 +3,45 @@ import React from 'react'
 import styled from 'styled-components'
 
 import TodoItem from './TodoItem'
+import FilterLink from '../components/FilterLink'
 
-const TodoList = ({ items, toggleComplete }) => (
+import { Subscribe } from 'unstated'
+import TodosContainer, { VisibilityFilters } from '../containers/todos'
+
+const TodoList = ({ list, toggleComplete }) => (
   <Wrapper>
-    {items.map(item => {
-      const onComplete = e => {
-        toggleComplete(item.id)
+  
+  <Subscribe to={[TodosContainer]}>
+  
+    {todosStore => {
+     
+      let filteredTodos = []
+      switch (todosStore.state.filter) {
+        case VisibilityFilters.SHOW_ACTIVE:
+          filteredTodos = list.todos.filter(todo => todo.completed === false)
+          break
+        case VisibilityFilters.SHOW_COMPLETED:
+          filteredTodos = list.todos.filter(todo => todo.completed === true)
+          break
+        case VisibilityFilters.SHOW_ALL:
+          filteredTodos = list.todos
+          break
+        default:
+        
+        filteredTodos = list.todos
       }
 
-      return <TodoItem key={item.id} {...item} onComplete={onComplete} />
-    })}
-  </Wrapper>
+      return (
+        filteredTodos.map(item => {
+        const onComplete = e => {
+          toggleComplete(list.id, item.id)
+        }
+          return <TodoItem key={item.id} {...item} onComplete={onComplete} />
+      })
+    )
+    }}
+  </Subscribe>
+</Wrapper>
 )
 
 const Wrapper = styled.div`
